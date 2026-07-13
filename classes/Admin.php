@@ -279,9 +279,6 @@ class Admin extends Db{
     // }
 }
 
-// $admin = new Admin;
-// $admins = $admin->signup('Olusegun Caleb', 'oluseguncaleb6@gmail.com', '1234');
-// echo $admins;
 
 
 ?>
