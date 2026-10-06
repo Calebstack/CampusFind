@@ -253,7 +253,5 @@ class Student Extends Db{
 }
 
 // $stud = new Student;
-// $test = $stud->signup("olusegun", "Caleb", "oluseguncaleb6@gmail.com", "54321", "art", 1);
-// echo $test;
 
 ?>
