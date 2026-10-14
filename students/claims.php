@@ -131,6 +131,7 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f8
 .status-approved { background: #ecfdf5; color: #047857; }
 .status-rejected { background: #fef2f2; color: #b91c1c; }
 .status-returned { background: #eff6ff; color: #1d4ed8; }
+.status-collected { background: #eff6ff; color: #1d4ed8; }
 
 .btn-view-sm {
     background: transparent; border: 1.5px solid #4f46e5; color: #4f46e5;
@@ -165,8 +166,10 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f8
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item"><a class="nav-link" href="studenthome.php"><i class="fas fa-home me-1"></i>Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="categories.php"><i class="fas fa-th-large me-1"></i>Categories</a></li>
+                    <li class="nav-item"><a class="nav-link" href="items.php"><i class="fas fa-th-large me-1"></i>Browse Items</a></li>
+                    <li class="nav-item"><a class="nav-link" href="wanted.php"><i class="fas fa-bullhorn me-1"></i>Wanted/Lost</a></li>
                     <li class="nav-item"><a class="nav-link" href="reportfound.php"><i class="fas fa-plus-circle me-1"></i>Report Item</a></li>
+                    <li class="nav-item"><a class="nav-link" href="reportlost.php"><i class="fas fa-search me-1"></i>Report Lost</a></li>
                     <li class="nav-item"><a class="nav-link nav-home" href="claims.php"><i class="fas fa-clipboard-list me-1"></i>Claims</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-2">
@@ -260,12 +263,21 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f8
                                 <td><?php echo $claim['founditems_date']; ?></td>
                                 <td><?php echo $claim['claim_date']; ?></td>
                                 <td>
-                                    <span class="status-pill status-<?php echo $claim['status']; ?>">
-                                        <?php echo ucfirst($claim['status']); ?>
+                                    <span class="status-pill status-<?php echo !empty($claim['received_at']) ? 'collected' : htmlspecialchars($claim['status'], ENT_QUOTES, 'UTF-8'); ?>">
+                                        <?php echo !empty($claim['received_at']) ? 'Collected' : ucfirst(htmlspecialchars($claim['status'], ENT_QUOTES, 'UTF-8')); ?>
                                     </span>
+                                    <?php if($claim['status'] === 'approved' && empty($claim['received_at'])): ?>
+                                        <div class="small text-muted mt-2">Collect from: <?php echo htmlspecialchars($claim['reported_to'] ?: 'Contact the item reporter for collection instructions.', ENT_QUOTES, 'UTF-8'); ?></div>
+                                    <?php endif; ?>
                                 </td>
                                 <td>
-                                    <a href="itemdetails.php?id=<?php echo $claim['founditems_id']; ?>" class="btn-view-sm">View</a>
+                                    <a href="itemdetails.php?id=<?php echo (int)$claim['founditems_id']; ?>" class="btn-view-sm">View</a>
+                                    <?php if($claim['status'] === 'approved' && empty($claim['received_at'])): ?>
+                                        <form action="../action/confirmreceipt.php" method="post" class="mt-2">
+                                            <input type="hidden" name="claim_id" value="<?php echo (int)$claim['claim_id']; ?>">
+                                            <button type="submit" class="btn btn-sm btn-success">Confirm received</button>
+                                        </form>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                             <?php endforeach; ?>

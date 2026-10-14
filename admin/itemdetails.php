@@ -119,6 +119,7 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f1
                     <li class="nav-item"><a class="nav-link" href="adminfounditems.php"><i class="fas fa-box me-1"></i>Found Items</a></li>
                     <li class="nav-item"><a class="nav-link" href="adminclaims.php"><i class="fas fa-clipboard-check me-1"></i>Claims</a></li>
                     <li class="nav-item"><a class="nav-link" href="adminstudents.php"><i class="fas fa-users me-1"></i>Students</a></li>
+                    <li class="nav-item"><a class="nav-link" href="admincategories.php"><i class="fas fa-tags me-1"></i>Categories</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-2">
                     <span style="color: rgba(255,255,255,0.5); font-size: 0.85rem; font-weight: 600;"><i class="fas fa-user-shield me-1"></i> Admin</span>
@@ -129,7 +130,6 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f1
     </div>
 </header>
 
-<!-- Back strip -->
 <div class="back-strip">
     <div class="container">
         <a href="adminfounditems.php" class="breadcrumb-link">
@@ -138,7 +138,6 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f1
     </div>
 </div>
 
-<!-- ITEM DETAILS -->
 <section class="py-5">
     <div class="container">
 
@@ -146,14 +145,12 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f1
 
             <?php if($items){ ?>
 
-            <!-- IMAGE -->
             <div class="col-lg-6">
                 <div class="item-photo-wrap">
                     <img src="<?php echo $items['founditems_img'] ?? '../images/item1.jpg'; ?>" class="item-photo" alt="<?php echo $items['founditems_name'] ?? 'Item'; ?>">
                 </div>
             </div>
 
-            <!-- DETAILS -->
             <div class="col-lg-6">
                 <div class="details-card">
                     <div>

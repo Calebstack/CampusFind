@@ -15,6 +15,7 @@ $approved_claims = $admin->count_approved_claims();
 $all_claims = $admin->get_all_claims();
 
 $recent_items = is_array($items) ? array_slice($items, 0, 5) : [];
+$cat_count = $admin->count_categories();
 $recent_claims = is_array($all_claims) ? array_slice($all_claims, 0, 5) : [];
 ?>
 <!DOCTYPE html>
@@ -178,6 +179,7 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f1
                     <li class="nav-item"><a class="nav-link" href="adminfounditems.php"><i class="fas fa-box me-1"></i>Found Items</a></li>
                     <li class="nav-item"><a class="nav-link" href="adminclaims.php"><i class="fas fa-clipboard-check me-1"></i>Claims</a></li>
                     <li class="nav-item"><a class="nav-link" href="adminstudents.php"><i class="fas fa-users me-1"></i>Students</a></li>
+                    <li class="nav-item"><a class="nav-link" href="admincategories.php"><i class="fas fa-tags me-1"></i>Categories</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-2">
                     <span style="color: #475569; font-size: 0.85rem; font-weight: 600;">
@@ -247,6 +249,17 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f1
                     <div>
                         <div class="stat-number"><?php echo count($count) ?></div>
                         <div class="stat-label">Students</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-icon-wrap" style="background: rgba(79,70,229,0.1);">
+                        <i class="fas fa-tags" style="color:#4f46e5;"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number"><?php echo $cat_count; ?></div>
+                        <div class="stat-label">Categories</div>
                     </div>
                 </div>
             </div>

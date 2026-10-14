@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+require_once "../students/userguard.php";
 require_once "../classes/Student.php";
 $rsp = new Student;
 

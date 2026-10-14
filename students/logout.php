@@ -12,6 +12,6 @@ $_SESSION = array();
 // Destroy the session
 session_destroy();
 
-header("location:../authentication/index.php");
+header("location:../index.php");
 exit;
 ?>

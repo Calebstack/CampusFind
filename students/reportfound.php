@@ -2,7 +2,7 @@
 
 session_start();
 require_once "userguard.php";
-require "../classes/Student.php";
+require_once "../classes/Student.php";
     $student = new Student();
     $record = $student->fetch_studentid($_SESSION['useronline']);
     $cats = $student->get_all_categories();
@@ -121,8 +121,10 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f8
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item"><a class="nav-link" href="studenthome.php"><i class="fas fa-home me-1"></i>Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="categories.php"><i class="fas fa-th-large me-1"></i>Categories</a></li>
+                    <li class="nav-item"><a class="nav-link" href="items.php"><i class="fas fa-th-large me-1"></i>Browse Items</a></li>
+                    <li class="nav-item"><a class="nav-link" href="wanted.php"><i class="fas fa-bullhorn me-1"></i>Wanted/Lost</a></li>
                     <li class="nav-item"><a class="nav-link nav-home" href="reportfound.php"><i class="fas fa-plus-circle me-1"></i>Report Item</a></li>
+                    <li class="nav-item"><a class="nav-link" href="reportlost.php"><i class="fas fa-search me-1"></i>Report Lost</a></li>
                     <li class="nav-item"><a class="nav-link" href="claims.php"><i class="fas fa-clipboard-list me-1"></i>Claims</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-2">

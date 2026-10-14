@@ -8,7 +8,7 @@ if(isset($_SESSION['useronline'])){
     $students = $student->fetch_studentid($_SESSION['useronline']);   
 }
 
-$founditems = $student->get_founditems();
+$founditems = $student->get_recent_founditems(6);
 
 ?>
 
@@ -210,7 +210,13 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f8
                         <a class="nav-link" href="categories.php"><i class="fas fa-th-large me-1"></i>Categories</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="wanted.php"><i class="fas fa-bullhorn me-1"></i>Wanted/Lost</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="reportfound.php"><i class="fas fa-plus-circle me-1"></i>Report Item</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reportlost.php"><i class="fas fa-search me-1"></i>Report Lost</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="claims.php"><i class="fas fa-clipboard-list me-1"></i>Claims</a>
@@ -281,6 +287,15 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f8
                 </div>
             </div>
             <?php } ?>
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="items.php" class="btn-view-more" style="text-decoration:none; display:inline-block;">
+                <i class="fas fa-th-large me-2"></i>Browse All Items
+            </a>
+            <a href="wanted.php" class="btn-view-more ms-2" style="text-decoration:none; display:inline-block;">
+                <i class="fas fa-bullhorn me-2"></i>View Lost Notices
+            </a>
         </div>
 
     </div>

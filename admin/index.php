@@ -1,10 +1,10 @@
-<?php
-
+﻿<?php
 session_start();
-
-?>
-
-<!DOCTYPE html>
+if (isset($_SESSION['adminonline'])) {
+    header("Location: admindashboard.php");
+    exit();
+}
+?><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -117,3 +117,4 @@ session_start();
     </div>
 </body>
 </html>
+

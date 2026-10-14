@@ -19,12 +19,12 @@ session_start();
         exit;
         }else{
             $_SESSION['errormsg'] = $rsp;
-            header("location:../loginadmin.php");
+            header("location:../index.php");
             exit;
         }
     }else{
         $_SESSION['errormsg'] = "Kindly fill the form";
-        header("location:../loginadmin.php");
+        header("location:../index.php");
         exit;
     }
 

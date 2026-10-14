@@ -7,15 +7,14 @@
     <meta name="description" content="CampusFind – the easiest way for Nigerian university students to report and recover lost items on campus.">
     <title>CampusFind - Reunite with Your Lost Items</title>
     
-    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/fa/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/theme.css">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/fa/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
 
     <style>
         :root { --primary: #4f46e5; --primary-light: #6366f1; }
         body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #ffffff; color: #334155; }
 
-        /* ── HEADER ────────────────────────────────────── */
         .header {
             background: rgba(255,255,255,0.9) !important;
             backdrop-filter: blur(14px);
@@ -47,7 +46,6 @@
         }
         .btn-get-started:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(79,70,229,0.45) !important; }
 
-        /* ── HERO ──────────────────────────────────────── */
         .hero {
             background: linear-gradient(170deg, #f8fafc 0%, #eef2ff 60%, #e0e7ff 100%);
             padding: 100px 0 90px;
@@ -102,7 +100,6 @@
             object-fit: cover;
         }
 
-        /* ── FEATURES ──────────────────────────────────── */
         .features { padding: 100px 0; background: #fff; }
 
         .feature-card {
@@ -139,7 +136,6 @@
         .section-heading { font-weight: 800; font-size: 2rem; color: #0f172a; letter-spacing: -0.02em; }
         .section-sub { color: #64748b; font-size: 1rem; max-width: 520px; margin: 0 auto; }
 
-        /* ── HOW IT WORKS ──────────────────────────────── */
         .how { padding: 100px 0; background: #f8fafc; }
 
         .step-card {
@@ -175,7 +171,6 @@
         .step-card h5 { font-weight: 700; color: #0f172a; margin-bottom: 10px; }
         .step-card p  { color: #64748b; font-size: 0.92rem; line-height: 1.6; }
 
-        /* ── UNIVERSITY SECTION ────────────────────────── */
         .uni-section { padding: 100px 0; background: #fff; }
 
         .uni-img {
@@ -195,17 +190,30 @@
             display: flex; align-items: center; justify-content: center;
             font-size: 0.8rem; flex-shrink: 0;
         }
+
+        footer { background: linear-gradient(180deg,#0c1220 0%,#090d16 100%) !important; color:#94a3b8 !important; padding:80px 0 24px !important; border-top:1px solid rgba(255,255,255,0.05); }
+        footer h5 { color:#fff !important; font-weight:700 !important; font-size:1rem !important; margin-bottom:1.25rem !important; }
+        footer ul.list-unstyled li { margin-bottom:10px; }
+        footer a { color:#64748b !important; text-decoration:none !important; font-size:0.9rem; transition:all 0.2s ease !important; display:inline-block; }
+        footer a:hover { color:#818cf8 !important; transform:translateX(4px); }
+        .footer-logo { width:160px !important; margin-bottom:1.25rem !important; opacity:0.9; }
+        .footer-desc { font-size:0.88rem; color:#475569; line-height:1.7; max-width:260px; }
+        .footer-divider { border-color:rgba(255,255,255,0.07) !important; margin:2rem 0 1.5rem !important; }
+        .footer-copy { color:#334155; font-size:0.85rem; }
+        .social-icons { display:flex; gap:16px; margin-top:1.5rem; }
+        .social-icons a { width:38px; height:38px; border-radius:10px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); display:flex !important; align-items:center; justify-content:center; color:#64748b !important; font-size:1rem; transition:all 0.3s ease !important; }
+        .social-icons a:hover { background:rgba(79,70,229,0.25) !important; color:#818cf8 !important; border-color:rgba(79,70,229,0.4) !important; transform:translateY(-3px) !important; }
+        .social-icons i { margin:0 !important; font-size:0.95rem !important; }
     </style>
 </head>
 
 <body>
 
-<!-- ── HEADER ──────────────────────────────────────── -->
 <header class="header">
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a class="navbar-brand" href="#">
-                <img src="../images/logop.png" alt="CampusFind Logo">
+            <a class="navbar-brand" href="index.php">
+                <img src="images/logop.png" alt="CampusFind Logo">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -217,15 +225,14 @@
                     <li class="nav-item"><a class="nav-link" href="#footer">Contact Us</a></li>
                 </ul>
                 <div class="d-flex gap-2">
-                    <a href="loginstudent.php" class="btn btn-login">Login</a>
-                    <a href="signupstudent.php" class="btn btn-get-started">Sign Up</a>
+                    <a href="authentication/loginstudent.php" class="btn btn-login">Login</a>
+                    <a href="authentication/signupstudent.php" class="btn btn-get-started">Sign Up</a>
                 </div>
             </div>
         </nav>
     </div>
 </header>
 
-<!-- ── HERO ────────────────────────────────────────── -->
 <section class="hero" id="head">
     <div class="container">
         <div class="row align-items-center">
@@ -235,18 +242,17 @@
                 <p class="lead mb-4">
                     Report lost or found items, get smart matches, and recover your belongings safely and quickly.
                 </p>
-                <a href="signupstudent.php" class="btn-hero" style="text-decoration: none">
+                <a href="authentication/signupstudent.php" class="btn-hero" style="text-decoration: none">
                     Start Reporting Now <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
             <div class="col-lg-6 text-center mt-5 mt-lg-0">
-                <img src="../images/land1.jpg" class="img-fluid hero-img" alt="CampusFind Hero">
+                <img src="images/land1.jpg" class="img-fluid hero-img" alt="CampusFind Hero">
             </div>
         </div>
     </div>
 </section>
 
-<!-- ── FEATURES ────────────────────────────────────── -->
 <section class="features">
     <div class="container">
         <div class="text-center mb-5">
@@ -286,7 +292,6 @@
     </div>
 </section>
 
-<!-- ── HOW IT WORKS ────────────────────────────────── -->
 <section class="how">
     <div class="container">
         <div class="text-center mb-5">
@@ -320,12 +325,11 @@
     </div>
 </section>
 
-<!-- ── FOR UNIVERSITIES ────────────────────────────── -->
 <section class="uni-section" id="universities">
     <div class="container">
         <div class="row align-items-center g-5">
             <div class="col-lg-6">
-                <img src="../images/land2.jpg" class="img-fluid uni-img" alt="For Universities">
+                <img src="images/land2.jpg" class="img-fluid uni-img" alt="For Universities">
             </div>
             <div class="col-lg-6">
                 <div class="section-tag"><i class="fas fa-university"></i> For Universities</div>
@@ -356,8 +360,49 @@
     </div>
 </section>
 
-<?php require_once "../students/footer.php"; ?>
+<footer id="footer">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-4 col-md-12">
+                <img src="images/logod.png" alt="CampusFind" class="footer-logo">
+                <p class="footer-desc">Helping students across Nigerian universities recover their lost items quickly and safely.</p>
+                <div class="social-icons">
+                    <a href="#" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+                <h5>Platform</h5>
+                <ul class="list-unstyled">
+                    <li><a href="authentication/loginstudent.php">Browse Items</a></li>
+                    <li><a href="authentication/loginstudent.php">Report Found Item</a></li>
+                    <li><a href="authentication/loginstudent.php">Report Lost Item</a></li>
+                    <li><a href="#how">How It Works</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-4 col-6">
+                <h5>Company</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#head">About Us</a></li>
+                    <li><a href="#universities">For Universities</a></li>
+                    <li><a href="#footer">Contact</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-4 col-12">
+                <h5>Get In Touch</h5>
+                <p style="font-size:0.88rem; margin-bottom:10px;"><i class="fas fa-envelope me-2" style="color:#4f46e5;"></i> hello@campusfind.ng</p>
+                <p style="font-size:0.88rem;"><i class="fas fa-phone me-2" style="color:#4f46e5;"></i> +234 803 000 0000</p>
+            </div>
+        </div>
+        <hr class="footer-divider">
+        <div class="text-center footer-copy">
+            <p class="mb-0">&copy; 2026 CampusFind. All Rights Reserved.</p>
+        </div>
+    </div>
+</footer>
 
-<script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

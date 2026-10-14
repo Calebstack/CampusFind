@@ -154,8 +154,10 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f8
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item"><a class="nav-link" href="studenthome.php"><i class="fas fa-home me-1"></i>Home</a></li>
-                    <li class="nav-item"><a class="nav-link nav-home" href="categories.php"><i class="fas fa-th-large me-1"></i>Categories</a></li>
+                    <li class="nav-item"><a class="nav-link nav-home" href="items.php"><i class="fas fa-th-large me-1"></i>Browse Items</a></li>
+                    <li class="nav-item"><a class="nav-link" href="wanted.php"><i class="fas fa-bullhorn me-1"></i>Wanted/Lost</a></li>
                     <li class="nav-item"><a class="nav-link" href="reportfound.php"><i class="fas fa-plus-circle me-1"></i>Report Item</a></li>
+                    <li class="nav-item"><a class="nav-link" href="reportlost.php"><i class="fas fa-search me-1"></i>Report Lost</a></li>
                     <li class="nav-item"><a class="nav-link" href="claims.php"><i class="fas fa-clipboard-list me-1"></i>Claims</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-2">
@@ -175,13 +177,16 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f8
     </div>
 </section>
 
-<!-- FILTER BAR -->
+<!-- SEARCH + FILTER BAR -->
 <div class="filter-bar">
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-5">
-                <select class="form-select filter-select" id="categorySelect" aria-label="Filter by category">
-                    <option value="all"><i class="fas fa-th"></i> All Categories</option>
+        <div class="row g-2 justify-content-center">
+            <div class="col-md-4">
+                <input type="text" id="searchInput" class="form-control filter-select" placeholder="&#128269; Search by item name or location..." oninput="filterItems()">
+            </div>
+            <div class="col-md-3">
+                <select class="form-select filter-select" id="categorySelect" aria-label="Filter by category" onchange="filterItems()">
+                    <option value="all">All Categories</option>
                     <?php foreach($cats as $cat){ ?>
                     <option value="<?php echo $cat['categories_id']; ?>"><?php echo $cat['category_name']; ?></option>
                     <?php } ?>
@@ -202,7 +207,7 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f8
 
         <div class="row g-4" id="itemsGrid">
             <?php foreach($all as $al){ ?>
-                <div class="col-lg-4 col-md-6 item-col" data-category-id="<?php echo $al['category_id']; ?>">
+                <div class="col-lg-4 col-md-6 item-col" data-category-id="<?php echo $al['category_id']; ?>" data-name="<?php echo htmlspecialchars(strtolower($al['founditems_name'])); ?>" data-location="<?php echo htmlspecialchars(strtolower($al['founditems_location'])); ?>">
                     <div class="item-card">
                         <div style="overflow: hidden;">
                             <img src="<?php echo $al['founditems_img']; ?>" class="card-img-top" alt="<?php echo $al['founditems_name']; ?>">
@@ -232,13 +237,18 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f8
 </section>
 
 <script>
-document.getElementById('categorySelect').onchange = function() {
-    var selected = this.value;
-    var items = document.querySelectorAll('.item-col');
-    var visible = 0;
+function filterItems() {
+    var selected = document.getElementById('categorySelect').value;
+    var query    = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+    var items    = document.querySelectorAll('.item-col');
+    var visible  = 0;
     items.forEach(function(item) {
-        var catId = item.getAttribute('data-category-id');
-        if (selected == 'all' || catId == selected) {
+        var catId   = item.getAttribute('data-category-id');
+        var name    = (item.getAttribute('data-name') || '').toLowerCase();
+        var loc     = (item.getAttribute('data-location') || '').toLowerCase();
+        var catOk   = (selected === 'all' || catId === selected);
+        var searchOk = (query === '' || name.indexOf(query) !== -1 || loc.indexOf(query) !== -1);
+        if (catOk && searchOk) {
             item.style.display = '';
             visible++;
         } else {
@@ -246,7 +256,8 @@ document.getElementById('categorySelect').onchange = function() {
         }
     });
     document.getElementById('emptyState').style.display = (visible > 0) ? 'none' : 'block';
-};
+}
+document.getElementById('categorySelect').onchange = filterItems;
 </script>
 
 <?php require_once "footer.php" ?>

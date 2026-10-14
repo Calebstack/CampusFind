@@ -19,7 +19,7 @@ class Admin extends Db{
             $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $res;
 
-        }catch(PDOExtception $e){
+        }catch(PDOException $e){
             //echo $e->getMessage();
             return false;
         }
@@ -33,7 +33,7 @@ class Admin extends Db{
             $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $res;
 
-        }catch(PDOExtception $e){
+        }catch(PDOException $e){
             //echo $e->getMessage();
             return false;
         }
@@ -124,6 +124,17 @@ class Admin extends Db{
         }
     }
 
+    public function set_student_banned($student_id, $is_banned){
+        try{
+            $sql = "UPDATE students SET is_banned = ? WHERE student_id = ?";
+            $stmt = $this->dbconn->prepare($sql);
+            $stmt->execute([(int)$is_banned, $student_id]);
+            return $stmt->rowCount() === 1;
+        }catch(PDOException $e){
+            return false;
+        }
+    }
+
     public function count_items_reported($student_id){
         try{
             $sql = "SELECT COUNT(*) as count FROM founditems WHERE student_id = ?";
@@ -187,8 +198,7 @@ class Admin extends Db{
         try {
             $this->dbconn->beginTransaction();
 
-            // 1. Get the founditems_id associated with this claim
-            $sql_get = "SELECT founditems_id FROM claims WHERE claim_id = ?";
+            $sql_get = "SELECT founditems_id FROM claims WHERE claim_id = ? AND status = 'pending' FOR UPDATE";
             $stmt_get = $this->dbconn->prepare($sql_get);
             $stmt_get->execute([$claim_id]);
             $claim = $stmt_get->fetch(PDO::FETCH_ASSOC);
@@ -200,17 +210,24 @@ class Admin extends Db{
 
             $founditems_id = $claim['founditems_id'];
 
-            // 2. Approve this claim
-            $sql_approve = "UPDATE claims SET status = 'approved', admin_id = ? WHERE claim_id = ?";
+            $sql_approve = "UPDATE claims SET status = 'approved', admin_id = ? WHERE claim_id = ? AND status = 'pending'";
             $stmt_approve = $this->dbconn->prepare($sql_approve);
             $stmt_approve->execute([$admin_id, $claim_id]);
 
-            // 3. Mark the found item as claimed
-            $sql_item = "UPDATE founditems SET status = 'claimed' WHERE founditems_id = ?";
+            if($stmt_approve->rowCount() !== 1){
+                $this->dbconn->rollBack();
+                return false;
+            }
+
+            $sql_item = "UPDATE founditems SET status = 'claimed' WHERE founditems_id = ? AND status = 'available'";
             $stmt_item = $this->dbconn->prepare($sql_item);
             $stmt_item->execute([$founditems_id]);
 
-            // 4. Reject other pending claims for this same item
+            if($stmt_item->rowCount() !== 1){
+                $this->dbconn->rollBack();
+                return false;
+            }
+
             $sql_reject_others = "UPDATE claims SET status = 'rejected', admin_id = ? WHERE founditems_id = ? AND claim_id != ? AND status = 'pending'";
             $stmt_reject_others = $this->dbconn->prepare($sql_reject_others);
             $stmt_reject_others->execute([$admin_id, $founditems_id, $claim_id]);
@@ -218,17 +235,19 @@ class Admin extends Db{
             $this->dbconn->commit();
             return true;
         } catch (PDOException $e) {
-            $this->dbconn->rollBack();
+            if($this->dbconn->inTransaction()){
+                $this->dbconn->rollBack();
+            }
             return false;
         }
     }
 
     public function reject_claim($claim_id, $admin_id){
         try {
-            $sql = "UPDATE claims SET status = 'rejected', admin_id = ? WHERE claim_id = ?";
+            $sql = "UPDATE claims SET status = 'rejected', admin_id = ? WHERE claim_id = ? AND status = 'pending'";
             $stmt = $this->dbconn->prepare($sql);
             $stmt->execute([$admin_id, $claim_id]);
-            return true;
+            return $stmt->rowCount() === 1;
         } catch (PDOException $e) {
             return false;
         }
@@ -265,18 +284,97 @@ class Admin extends Db{
         }
     }
 
-    // public function signup($fullname, $email, $pass1){
-    //     $hash = password_hash($pass1, PASSWORD_DEFAULT);
-    //     try{
-    //         $sql = "INSERT INTO admin(admin_fullname, admin_email, admin_pwd) VALUES(?,?,?)";
-    //         $stmt = $this->dbconn->prepare($sql);
-    //         $stmt->execute([$fullname, $email, $hash]);
-    //         $id = $this->dbconn->lastInsertId();
-    //         return $id;
-    //     }catch(Exception $e) {
-    //         return $e->getMessage();
-    //     }
-    // }
+//     public function signup($fullname, $email, $pass1){
+//         $hash = password_hash($pass1, PASSWORD_DEFAULT);
+//         try{
+//             $sql = "INSERT INTO admin(admin_fullname, admin_email, admin_pwd) VALUES(?,?,?)";
+//             $stmt = $this->dbconn->prepare($sql);
+//             $stmt->execute([$fullname, $email, $hash]);
+//             $id = $this->dbconn->lastInsertId();
+//             return $id;
+//         }catch(Exception $e) {
+//             return $e->getMessage();
+//         }
+//     }
+
+    public function get_all_categories_with_count(){
+        try{
+            $sql = "SELECT categories.*, COUNT(founditems.founditems_id) as item_count
+                    FROM categories
+                    LEFT JOIN founditems ON categories.categories_id = founditems.category_id
+                    GROUP BY categories.categories_id
+                    ORDER BY categories.categories_id ASC";
+            $stmt = $this->dbconn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }catch(PDOException $e){
+            return false;
+        }
+    }
+
+    public function get_category_by_id($id){
+        try{
+            $sql = "SELECT * FROM categories WHERE categories_id = ?";
+            $stmt = $this->dbconn->prepare($sql);
+            $stmt->execute([$id]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }catch(PDOException $e){
+            return false;
+        }
+    }
+
+    public function add_category($name){
+        try{
+            $sql = "INSERT INTO categories(category_name) VALUES(?)";
+            $stmt = $this->dbconn->prepare($sql);
+            $stmt->execute([trim($name)]);
+            return $this->dbconn->lastInsertId();
+        }catch(PDOException $e){
+            return false;
+        }
+    }
+
+    public function update_category($id, $name){
+        try{
+            $sql = "UPDATE categories SET category_name = ? WHERE categories_id = ?";
+            $stmt = $this->dbconn->prepare($sql);
+            $stmt->execute([trim($name), $id]);
+            return true;
+        }catch(PDOException $e){
+            return false;
+        }
+    }
+
+    public function delete_category($id){
+        try{
+            // Check if category has items
+            $check = $this->dbconn->prepare("SELECT COUNT(*) as cnt FROM founditems WHERE category_id = ?");
+            $check->execute([$id]);
+            $row = $check->fetch(PDO::FETCH_ASSOC);
+            if($row["cnt"] > 0){
+                return "has_items";
+            }
+            $sql = "DELETE FROM categories WHERE categories_id = ?";
+            $stmt = $this->dbconn->prepare($sql);
+            $stmt->execute([$id]);
+            return true;
+        }catch(PDOException $e){
+            return false;
+        }
+    }
+
+    public function count_categories(){
+        try{
+            $sql = "SELECT COUNT(*) as cnt FROM categories";
+            $stmt = $this->dbconn->prepare($sql);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $row["cnt"];
+        }catch(PDOException $e){
+            return 0;
+        }
+    }
+
 }
 
 

@@ -110,6 +110,7 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f1
                     <li class="nav-item"><a class="nav-link nav-home" href="adminfounditems.php"><i class="fas fa-box me-1"></i>Found Items</a></li>
                     <li class="nav-item"><a class="nav-link" href="adminclaims.php"><i class="fas fa-clipboard-check me-1"></i>Claims</a></li>
                     <li class="nav-item"><a class="nav-link" href="adminstudents.php"><i class="fas fa-users me-1"></i>Students</a></li>
+                    <li class="nav-item"><a class="nav-link" href="admincategories.php"><i class="fas fa-tags me-1"></i>Categories</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-2">
                     <span style="color: #475569; font-size: 0.85rem; font-weight: 600;"><i class="fas fa-user-shield me-1"></i> Admin</span>

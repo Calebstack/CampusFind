@@ -6,6 +6,7 @@ require_once "../classes/Student.php";
 $item = new Student;
 $id = $_GET['id'];
 $items = $item->fetch_founditemtid($id);
+$is_reporter = ($items && isset($_SESSION['useronline']) && (int)$_SESSION['useronline'] === (int)($items['student_id'] ?? -1));
 
 ?>
 
@@ -122,8 +123,10 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f8
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item"><a class="nav-link" href="studenthome.php"><i class="fas fa-home me-1"></i>Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="categories.php"><i class="fas fa-th-large me-1"></i>Categories</a></li>
+                    <li class="nav-item"><a class="nav-link" href="items.php"><i class="fas fa-th-large me-1"></i>Browse Items</a></li>
+                    <li class="nav-item"><a class="nav-link" href="wanted.php"><i class="fas fa-bullhorn me-1"></i>Wanted/Lost</a></li>
                     <li class="nav-item"><a class="nav-link" href="reportfound.php"><i class="fas fa-plus-circle me-1"></i>Report Item</a></li>
+                    <li class="nav-item"><a class="nav-link" href="reportlost.php"><i class="fas fa-search me-1"></i>Report Lost</a></li>
                     <li class="nav-item"><a class="nav-link" href="claims.php"><i class="fas fa-clipboard-list me-1"></i>Claims</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-2">
@@ -184,11 +187,17 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f8
                     </div>
 
                     <?php if(($items['status'] ?? 'available') === 'available'){ ?>
-                    <form action="../action/claims.php" method="post">
-                        <button type="submit" class="btn-claim" name="claim" value="<?php echo $items['founditems_id']; ?>">
-                            <i class="fas fa-hand-paper"></i> Claim This Item
-                        </button>
-                    </form>
+                        <?php if($is_reporter){ ?>
+                            <div class="btn-claimed-disabled" style="background:#eff6ff; color:#1d4ed8;">
+                                <i class="fas fa-info-circle"></i> You reported this item &mdash; you cannot claim it
+                            </div>
+                        <?php } else { ?>
+                            <form action="../action/claims.php" method="post">
+                                <button type="submit" class="btn-claim" name="claim" value="<?php echo $items['founditems_id']; ?>">
+                                    <i class="fas fa-hand-paper"></i> Claim This Item
+                                </button>
+                            </form>
+                        <?php } ?>
                     <?php } else { ?>
                         <div class="btn-claimed-disabled">
                             <i class="fas fa-lock"></i> Already Claimed

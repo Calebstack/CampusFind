@@ -22,7 +22,6 @@ $claims = $admin->get_all_claims();
 :root { --primary: #4f46e5; }
 body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f1f5f9; }
 
-/* Admin navbar */
 .admin-header {
     background: rgba(255, 255, 255, 0.85) !important;
     backdrop-filter: blur(12px) !important;
@@ -116,6 +115,7 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f1
                     <li class="nav-item"><a class="nav-link" href="adminfounditems.php"><i class="fas fa-box me-1"></i>Found Items</a></li>
                     <li class="nav-item"><a class="nav-link nav-home" href="adminclaims.php"><i class="fas fa-clipboard-check me-1"></i>Claims</a></li>
                     <li class="nav-item"><a class="nav-link" href="adminstudents.php"><i class="fas fa-users me-1"></i>Students</a></li>
+                    <li class="nav-item"><a class="nav-link" href="admincategories.php"><i class="fas fa-tags me-1"></i>Categories</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-2">
                     <span style="color: #475569; font-size: 0.85rem; font-weight: 600;"><i class="fas fa-user-shield me-1"></i> Admin</span>
@@ -165,6 +165,9 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f1
                                     <span class="badge-status badge-pending">Pending</span>
                                 <?php } elseif($claim['status'] == 'approved'){ ?>
                                     <span class="badge-status badge-approved">Approved</span>
+                                    <?php if(!empty($claim['received_at'])){ ?>
+                                        <div class="small text-success mt-1">Item received</div>
+                                    <?php } ?>
                                 <?php } else { ?>
                                     <span class="badge-status badge-rejected">Rejected</span>
                                 <?php } ?>

@@ -22,7 +22,7 @@ $students = $admin->get_all_students();
 :root { --primary: #4f46e5; }
 body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f1f5f9; }
 
-/* Admin navbar */
+
 .admin-header {
     background: rgba(255, 255, 255, 0.85) !important;
     backdrop-filter: blur(12px) !important;
@@ -120,6 +120,7 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f1
                     <li class="nav-item"><a class="nav-link" href="adminfounditems.php"><i class="fas fa-box me-1"></i>Found Items</a></li>
                     <li class="nav-item"><a class="nav-link" href="adminclaims.php"><i class="fas fa-clipboard-check me-1"></i>Claims</a></li>
                     <li class="nav-item"><a class="nav-link nav-home" href="adminstudents.php"><i class="fas fa-users me-1"></i>Students</a></li>
+                    <li class="nav-item"><a class="nav-link" href="admincategories.php"><i class="fas fa-tags me-1"></i>Categories</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-2">
                     <span style="color: #475569; font-size: 0.85rem; font-weight: 600;"><i class="fas fa-user-shield me-1"></i> Admin</span>
@@ -139,6 +140,7 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f1
 
 <section class="py-5">
     <div class="container">
+        <?php require_once "../partials/feedback.php"; ?>
         <div class="content-card">
             <div class="table-responsive">
                 <table class="table mb-0">
@@ -149,6 +151,8 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f1
                             <th>Department</th>
                             <th>Items Reported</th>
                             <th>Claims Made</th>
+                            <th>Account</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -165,10 +169,26 @@ body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: #f1
                             <td><span class="dept-pill"><?php echo $student['dept_name']; ?></span></td>
                             <td><span class="count-badge"><?php echo $admin->count_items_reported($student['student_id']); ?></span></td>
                             <td><span class="count-badge"><?php echo $admin->count_claims_made($student['student_id']); ?></span></td>
+                            <td>
+                                <?php if(!empty($student['is_banned'])){ ?>
+                                    <span class="badge text-bg-danger">Banned</span>
+                                <?php } else { ?>
+                                    <span class="badge text-bg-success">Active</span>
+                                <?php } ?>
+                            </td>
+                            <td>
+                                <form action="action/togglestudent.php" method="post" onsubmit="return confirm('<?php echo !empty($student['is_banned']) ? 'Unban' : 'Ban'; ?> this student?');">
+                                    <input type="hidden" name="student_id" value="<?php echo (int)$student['student_id']; ?>">
+                                    <input type="hidden" name="is_banned" value="<?php echo empty($student['is_banned']) ? '1' : '0'; ?>">
+                                    <button type="submit" class="btn btn-sm <?php echo !empty($student['is_banned']) ? 'btn-outline-success' : 'btn-outline-danger'; ?>">
+                                        <?php echo !empty($student['is_banned']) ? 'Unban' : 'Ban'; ?>
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                         <?php } } else { ?>
                         <tr class="empty-row">
-                            <td colspan="5"><i class="fas fa-user-slash fa-2x d-block mb-2 text-muted mx-auto"></i> No students found</td>
+                            <td colspan="7"><i class="fas fa-user-slash fa-2x d-block mb-2 text-muted mx-auto"></i> No students found</td>
                         </tr>
                         <?php } ?>
                     </tbody>
